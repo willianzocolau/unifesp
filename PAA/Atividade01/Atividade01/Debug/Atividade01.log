@@ -1,0 +1,5 @@
+﻿  Atividade01.cpp
+e:\drive\ensino\unifesp\7 termo\paa\atividade01\atividade01\atividade01.cpp(98): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'long', possible loss of data
+e:\drive\ensino\unifesp\7 termo\paa\atividade01\atividade01\atividade01.cpp(110): warning C4244: '=': conversion from 'unsigned __int64' to 'long', possible loss of data
+e:\drive\ensino\unifesp\7 termo\paa\atividade01\atividade01\atividade01.cpp(123): warning C4244: '=': conversion from 'unsigned __int64' to 'long', possible loss of data
+  Atividade01.vcxproj -> E:\Drive\Ensino\Unifesp\7 Termo\PAA\Atividade01\Debug\Atividade01.exe
