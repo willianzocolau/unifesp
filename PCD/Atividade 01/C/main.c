@@ -1,8 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SRAND_VALUE 1985
 #define SIZE_GRID 3
+#define MAX_GERACOES 10
+
+void limpar(){
+  system("@cls||clear");
+}
 
 int getNeighborsLeft(int** grid, int i, int j){
   j = j - 1;
@@ -27,7 +33,7 @@ int getNeighborsTop(int** grid, int i, int j){
   int neighbords_top = grid[i][j];
   return neighbords_top;
 }
-//TODO conta o próprio elemento?
+
 int getNeighbors(int** grid, int i, int j){
   int n_neighbors = 0;
   n_neighbors = n_neighbors + getNeighborsLeft(grid, i, j) + getNeighborsBottom(grid, i, j);
@@ -64,15 +70,16 @@ void copyBorder(int** grid){
 }
 
 void printPopulation(int **grid){
-  for (int i = 0; i < SIZE_GRID + 2; ++i) {
+  printf("\n_________________________________");
+  for (int i = 0; i < SIZE_GRID + 2; i++) {
     printf("\n");
-    for (int j = 0; j < SIZE_GRID + 2; ++j) {
+    for (int j = 0; j < SIZE_GRID + 2; j++) {
       printf("%d\t", grid[i][j]);
     }
   }
 }
 
-int** newPopulation(int** grid){
+void newPopulation(int** grid){
   srand(SRAND_VALUE);
   int i, j;
   for (i = 1; i <= SIZE_GRID; i++){
@@ -80,6 +87,18 @@ int** newPopulation(int** grid){
       grid[i][j] = rand() % 2;
     }
   }
+}
+
+int** copyPopulation(int** grid){
+  int i, j;
+  int **m = (int**)malloc((SIZE_GRID + 2) * sizeof(int*));
+  for (i = 0; i < SIZE_GRID + 2; i++){
+    m[i] = (int*) malloc((SIZE_GRID + 2) * sizeof(int));
+    for (j = 0; j < SIZE_GRID + 2; j++){
+      m[i][j] = grid[i][j];
+    }
+  }
+  return m;
 }
 
 int** initialize(){
@@ -94,9 +113,46 @@ int** initialize(){
   return m;
 }
 
+void DeadLife(int** grid, int** new_grid, int i, int j){
+  int neighbors = getNeighbors(grid, i, j);
+  int life = grid[i][j];
+  printf("\nVizinhos: %d", neighbors);
+  printf("\nMortoVivo: %d", life);
+  getchar();
+  limpar();
+  if(life == 1){
+    if(neighbors < 2) {
+      new_grid[i][j] = 0;
+    } else if (neighbors == 2 || neighbors == 3){
+      new_grid[i][j] = 1;
+    } else if(neighbors >= 4){
+      new_grid[i][j] = 0;
+    }
+  } else if(life == 0 && neighbors == 3){
+    new_grid[i][j] = 1;
+  }
+}
+
+void nextGeneration(int** grid){
+  int i, j;
+  int **new_grid;
+  printPopulation(grid);
+  printPopulation(new_grid);
+  for (i = 1; i <= SIZE_GRID; i++){
+    for (j = 1; j <= SIZE_GRID; j++){
+      DeadLife(grid, new_grid, i, j);
+      printPopulation(grid);
+      printPopulation(new_grid);
+      getchar();
+      limpar();
+    }
+  }
+}
+
 int main() {
   int** grid = initialize();
   newPopulation(grid);
   copyBorder(grid);
-  printPopulation(grid);
+  nextGeneration(grid);
+  getchar();
 }
