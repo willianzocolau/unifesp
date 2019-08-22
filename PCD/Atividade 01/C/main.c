@@ -3,11 +3,11 @@
 #include <string.h>
 
 #define SRAND_VALUE 1985
-#define SIZE_GRID 3
-#define MAX_GERACOES 10
+#define SIZE_GRID 2048
+#define MAX_GERACOES 2000
 
 void limpar(){
-  system("@cls||clear");
+  //system("@cls||clear");
 }
 
 int getNeighborsLeft(int** grid, int i, int j){
@@ -38,7 +38,6 @@ int getNeighbors(int** grid, int i, int j){
   int n_neighbors = 0;
   n_neighbors = n_neighbors + getNeighborsLeft(grid, i, j) + getNeighborsBottom(grid, i, j);
   n_neighbors = n_neighbors + getNeighborsRight(grid, i, j) + getNeighborsTop(grid, i, j);
-  printf("\n (%d, %d) -> %d", i , j, n_neighbors);
   return n_neighbors;
 }
 
@@ -89,6 +88,16 @@ void newPopulation(int** grid){
   }
 }
 
+int countPopulation(int** grid){
+  int i, j, count = 0;
+  for (i = 1; i <= SIZE_GRID; i++){
+    for (j = 1; j <= SIZE_GRID; j++){
+      count += grid[i][j];
+    }
+  }
+  return count;
+}
+
 int** copyPopulation(int** grid){
   int i, j;
   int **m = (int**)malloc((SIZE_GRID + 2) * sizeof(int*));
@@ -113,13 +122,17 @@ int** initialize(){
   return m;
 }
 
+void liberar(int** grid){
+  int i;
+  for (i = 0; i < SIZE_GRID + 2; i++){
+    free(grid[i]);
+  }
+  free(grid);
+}
+
 void DeadLife(int** grid, int** new_grid, int i, int j){
   int neighbors = getNeighbors(grid, i, j);
   int life = grid[i][j];
-  printf("\nVizinhos: %d", neighbors);
-  printf("\nMortoVivo: %d", life);
-  getchar();
-  limpar();
   if(life == 1){
     if(neighbors < 2) {
       new_grid[i][j] = 0;
@@ -133,26 +146,27 @@ void DeadLife(int** grid, int** new_grid, int i, int j){
   }
 }
 
-void nextGeneration(int** grid){
+int** nextGeneration(int** grid){
   int i, j;
-  int **new_grid;
-  printPopulation(grid);
-  printPopulation(new_grid);
+  int **new_grid = copyPopulation(grid);
   for (i = 1; i <= SIZE_GRID; i++){
     for (j = 1; j <= SIZE_GRID; j++){
       DeadLife(grid, new_grid, i, j);
-      printPopulation(grid);
-      printPopulation(new_grid);
-      getchar();
-      limpar();
     }
   }
+  return new_grid;
 }
 
 int main() {
   int** grid = initialize();
   newPopulation(grid);
-  copyBorder(grid);
-  nextGeneration(grid);
-  getchar();
+  for (int i = 0; i < MAX_GERACOES; i++) {
+    copyBorder(grid);
+    int** new_grid = nextGeneration(grid);
+    liberar(grid);
+    grid = new_grid;
+    new_grid = NULL;
+    free(new_grid);
+  }
+  printf("%d", countPopulation(grid));
 }
