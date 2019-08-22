@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <pthread.h>
+#include <sys/time.h>
 
 #define SRAND_VALUE 1985
 #define SIZE_GRID 2048
 #define MAX_GERACOES 2000
-
-void limpar(){
-  //system("@cls||clear");
-}
+#define MAX_THREADS 1
 
 int getNeighborsLeft(int** grid, int i, int j){
   j = j - 1;
@@ -146,11 +144,10 @@ void DeadLife(int** grid, int** new_grid, int i, int j){
   }
 }
 
-int** nextGeneration(int** grid){
+int** nextGeneration(int** grid, int** new_grid ,int max_line, int max_column){
   int i, j;
-  int **new_grid = copyPopulation(grid);
-  for (i = 1; i <= SIZE_GRID; i++){
-    for (j = 1; j <= SIZE_GRID; j++){
+  for (i = 1; i <= max_line; i++){
+    for (j = 1; j <= max_column; j++){
       DeadLife(grid, new_grid, i, j);
     }
   }
@@ -160,13 +157,38 @@ int** nextGeneration(int** grid){
 int main() {
   int** grid = initialize();
   newPopulation(grid);
+
+  struct timeval inicio, final2;
+  int tmili;
+
+  gettimeofday(&inicio, NULL);
+
   for (int i = 0; i < MAX_GERACOES; i++) {
     copyBorder(grid);
-    int** new_grid = nextGeneration(grid);
+    int **new_grid = copyPopulation(grid);
+
+    pthread_t t[MAX_THREADS];
+
+    for(th=0; th<MAX_THREADS; th++) {
+      pthread_create(&t[th], NULL, max, (void *) th);
+    }
+
+    nextGeneration(grid, new_grid, SIZE_GRID, SIZE_GRID);
+
+    for(th=0; th<MAX_THREADS; th++) {
+      pthread_join(t[th],NULL);
+      if (retorno[th]>maxglobal) maxglobal = retorno[th];
+    }
+
     liberar(grid);
     grid = new_grid;
     new_grid = NULL;
     free(new_grid);
   }
-  printf("%d", countPopulation(grid));
+
+  gettimeofday(&final2, NULL);
+  tmili = (int) (1000 * (final2.tv_sec - inicio.tv_sec) + (final2.tv_usec - inicio.tv_usec) / 1000);
+
+  printf("Células vivas: %d\n", countPopulation(grid));
+  printf("Tempo decorrido: %d milisegundos\n", tmili);
 }
