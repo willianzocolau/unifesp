@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #define SRAND_VALUE 1985
 #define SIZE_GRID 2048
@@ -9,8 +11,8 @@
 #define MAX_THREADS 4
 
 struct Args {
-  int** grid;
-  int** new_grid;
+    int** grid;
+    int** new_grid;
     int limite_inicial;
     int limite_final;
 };
@@ -181,18 +183,14 @@ int main() {
     int limite_final = incremento;
     copyBorder(grid);
     int **new_grid = copyPopulation(grid);
-    struct Args *args = (struct Args *)malloc(sizeof(struct Args));
 
     pthread_t t[MAX_THREADS];
 
     int th;
-    args->grid = grid;
-    args->new_grid = new_grid;
-
-    //printPopulation(args->grid);
-    //printPopulation(args->new_grid);
-
     for(th = 0; th < MAX_THREADS; th++) {
+      struct Args *args = (struct Args *)malloc(sizeof(struct Args));
+      args->grid = grid;
+      args->new_grid = new_grid;
       args->limite_inicial = limite_inicial;
       args->limite_final = limite_final;
       pthread_create(&t[th], NULL, nextGeneration, (void *) args);
@@ -204,14 +202,10 @@ int main() {
       pthread_join(t[th], NULL);
     }
 
-    //printPopulation(grid);
-    //printPopulation(new_grid);
-
     liberar(grid);
     grid = new_grid;
     new_grid = NULL;
     free(new_grid);
-    free(args);
   }
 
   gettimeofday(&final2, NULL);
