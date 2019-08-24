@@ -6,7 +6,14 @@
 #define SRAND_VALUE 1985
 #define SIZE_GRID 2048
 #define MAX_GERACOES 2000
-#define MAX_THREADS 1
+#define MAX_THREADS 4
+
+struct Args {
+  int** grid;
+  int** new_grid;
+    int limite_inicial;
+    int limite_final;
+};
 
 int getNeighborsLeft(int** grid, int i, int j){
   j = j - 1;
@@ -64,16 +71,6 @@ void copyBorder(int** grid){
   copyLeftRightColumns(grid);
   copyTopBottomLines(grid);
   copyCorners(grid);
-}
-
-void printPopulation(int **grid){
-  printf("\n_________________________________");
-  for (int i = 0; i < SIZE_GRID + 2; i++) {
-    printf("\n");
-    for (int j = 0; j < SIZE_GRID + 2; j++) {
-      printf("%d\t", grid[i][j]);
-    }
-  }
 }
 
 void newPopulation(int** grid){
@@ -144,14 +141,29 @@ void DeadLife(int** grid, int** new_grid, int i, int j){
   }
 }
 
-int** nextGeneration(int** grid, int** new_grid ,int max_line, int max_column){
+void* nextGeneration(void* args){
+  struct Args *my_args = (struct Args*)args;
+  int limite_inicial = (*my_args).limite_inicial;
+  int limite_final = (*my_args).limite_final;
+  int** grid = (*my_args).grid;
+  int** new_grid = (*my_args).new_grid;
+
   int i, j;
-  for (i = 1; i <= max_line; i++){
-    for (j = 1; j <= max_column; j++){
+  for (i = limite_inicial; i <= limite_final; i++){
+    for (j = 1; j <= SIZE_GRID; j++){
       DeadLife(grid, new_grid, i, j);
     }
   }
-  return new_grid;
+}
+
+void printPopulation(int **grid){
+  printf("\n_________________________________");
+  for (int i = 0; i < SIZE_GRID + 2; i++) {
+    printf("\n");
+    for (int j = 0; j < SIZE_GRID + 2; j++) {
+      printf("%d\t", grid[i][j]);
+    }
+  }
 }
 
 int main() {
@@ -164,26 +176,42 @@ int main() {
   gettimeofday(&inicio, NULL);
 
   for (int i = 0; i < MAX_GERACOES; i++) {
+    int incremento = SIZE_GRID / MAX_THREADS;
+    int limite_inicial = 1;
+    int limite_final = incremento;
     copyBorder(grid);
     int **new_grid = copyPopulation(grid);
+    struct Args *args = (struct Args *)malloc(sizeof(struct Args));
 
     pthread_t t[MAX_THREADS];
 
-    for(th=0; th<MAX_THREADS; th++) {
-      pthread_create(&t[th], NULL, max, (void *) th);
+    int th;
+    args->grid = grid;
+    args->new_grid = new_grid;
+
+    //printPopulation(args->grid);
+    //printPopulation(args->new_grid);
+
+    for(th = 0; th < MAX_THREADS; th++) {
+      args->limite_inicial = limite_inicial;
+      args->limite_final = limite_final;
+      pthread_create(&t[th], NULL, nextGeneration, (void *) args);
+      limite_inicial += incremento;
+      limite_final += incremento;
     }
 
-    nextGeneration(grid, new_grid, SIZE_GRID, SIZE_GRID);
-
-    for(th=0; th<MAX_THREADS; th++) {
-      pthread_join(t[th],NULL);
-      if (retorno[th]>maxglobal) maxglobal = retorno[th];
+    for(th = 0; th < MAX_THREADS; th++) {
+      pthread_join(t[th], NULL);
     }
+
+    //printPopulation(grid);
+    //printPopulation(new_grid);
 
     liberar(grid);
     grid = new_grid;
     new_grid = NULL;
     free(new_grid);
+    free(args);
   }
 
   gettimeofday(&final2, NULL);
@@ -192,3 +220,4 @@ int main() {
   printf("Células vivas: %d\n", countPopulation(grid));
   printf("Tempo decorrido: %d milisegundos\n", tmili);
 }
+
