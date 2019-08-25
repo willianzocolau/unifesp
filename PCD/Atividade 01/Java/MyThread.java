@@ -1,6 +1,6 @@
 package com.company;
 
-class MyThread {
+class MyThread extends Thread{
   public static int SIZE_GRID;
   private static int[][] grid;
   private static int[][] new_grid;

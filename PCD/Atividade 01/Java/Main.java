@@ -98,6 +98,10 @@ public class Main {
         limite_final += incremento;
       }
 
+      for(int j = 0; j < MAX_THREADS; j++) {
+        threads[j].join();
+      }
+
       grid = new_grid;
     }
 
