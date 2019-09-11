@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/tarefa_03.dir/main.cpp.o  -o tarefa_03 -lglut -lGLU -lGL -lm 
