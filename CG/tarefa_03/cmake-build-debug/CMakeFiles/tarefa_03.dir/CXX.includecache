@@ -6,7 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/quero/git/University/CG/tarefa_03/main.cpp
-iostream
+/home/willian/git/University/CG/tarefa_03/main.cpp
+GL/glut.h
+-
+math.h
 -
 
