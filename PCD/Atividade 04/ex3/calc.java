@@ -15,20 +15,15 @@ class MyThread implements Runnable {
     for (int i = inicio; i < fim; i++) {
       result_parcial += calc.vector1[i] * calc.vector2[i];
     }
-
-    try {
-      calc.sem.acquire();
+    synchronized(this) {
       calc.result += result_parcial;
-      calc.sem.release();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
     }
   }
 }
 
 
 public class calc {
-  static int SIZE = 10000000;
+  static int SIZE = 100000;
   static int NUM_THREADS = 8;
   static int result_th = SIZE / NUM_THREADS;
 
@@ -88,5 +83,4 @@ public class calc {
     System.out.println("Tempo: " + (end - start) + " ms");
   }
 }
-
 
