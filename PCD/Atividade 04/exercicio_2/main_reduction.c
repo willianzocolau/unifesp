@@ -15,7 +15,7 @@ void random_array() {
   }
 }
 
-void calc() {
+void scalar() {
   #pragma omp parallel for num_threads(NUM_THREADS) reduction(+:result)
   for (int i = 0; i < SIZE; i++) {
     result += vector1[i] * vector2[i];
@@ -28,7 +28,7 @@ int main() {
   random_array();
   struct timeval stop, start;
   gettimeofday(&start, NULL);
-  calc();
+  scalar();
   gettimeofday(&stop, NULL);
   double time = (double) (stop.tv_usec - start.tv_usec) / 1000000 + (double) (stop.tv_sec - start.tv_sec);
   printf("Resultado: %zu\n", result);

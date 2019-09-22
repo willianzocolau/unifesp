@@ -13,22 +13,17 @@ class MyThread implements Runnable {
   public void run() {
     long result_parcial = 0;
     for (int i = inicio; i < fim; i++) {
-      result_parcial += calc.vector1[i] * calc.vector2[i];
+      result_parcial += scalar.vector1[i] * scalar.vector2[i];
     }
-
-    try {
-      calc.sem.acquire();
-      calc.result += result_parcial;
-      calc.sem.release();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    synchronized(this) {
+      scalar.result += result_parcial;
     }
   }
 }
 
 
-public class calc {
-  static int SIZE = 10000000;
+public class scalar {
+  static int SIZE = 100000;
   static int NUM_THREADS = 8;
   static int result_th = SIZE / NUM_THREADS;
 
@@ -88,5 +83,4 @@ public class calc {
     System.out.println("Tempo: " + (end - start) + " ms");
   }
 }
-
 

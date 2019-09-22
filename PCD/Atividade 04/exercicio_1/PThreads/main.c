@@ -52,7 +52,7 @@ int get_limit(int start, int thread) {
   return finalValue;
 }
 
-void calc(){
+void scalar(){
   for (int i = 0; i < NUM_THREADS; i++) {
     int startValue = limit * i;
     Attr * dados = (Attr * ) malloc(sizeof(Attr));
@@ -77,7 +77,7 @@ int main() {
 
   struct timeval stop, start;
   gettimeofday( & start, NULL);
-  calc();
+  scalar();
   gettimeofday( & stop, NULL);
   double secs = secs = (double)(stop.tv_usec - start.tv_usec) / 1000000 + (double)(stop.tv_sec - start.tv_sec);
 
