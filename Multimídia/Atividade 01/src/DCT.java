@@ -1,3 +1,4 @@
+
 public class DCT {
 
     public double[][] apply(double[][] input, int numrows, int numcols) {
@@ -12,7 +13,7 @@ public class DCT {
 
     public double[] dct(double[] input, int numrows, int numcols) {
         double[] result = new double[numrows];
-        
+
         int SIZE = numcols;
 
         for (int k = 0; k < SIZE; k++) {
@@ -26,4 +27,21 @@ public class DCT {
 
         return result;
     }
+
+    public double[][] apply_quantization(double[][] input, int numrows, int numcols) {
+        double[][] result = new double[numrows][numcols];
+
+        int size_block = 8;
+        for (int i = 0; i < size_block; i++) {
+            for (int j = 0; j < size_block; j++) {
+                for (int k = 0; k < size_block; k++) {
+                    int c = (int) Math.round(input[size_block * i + j][size_block * i + k] / Utils.quantization_50[i][j]);
+                    result[size_block * i + j][size_block * i + k] = c;
+                }
+            }
+        }
+
+        return result;
+    }
+
 }

@@ -28,4 +28,10 @@ public class InverseDCT {
         }
         return result;
     }
+    
+    public double[][] apply_quantization(double[][] input, int numrows, int numcols) {
+        double[][] result = new double[numrows][numcols];
+        
+        return result;
+    }
 }
