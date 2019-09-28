@@ -7,45 +7,28 @@ pthread_t tid[MAX_THREADS];
 int counter;
 
 typedef struct {
-    int val;
+    int permissions;
     pthread_mutex_t mutex;
     pthread_cond_t cond;
 } semaphore;
 
 semaphore s;
 
-void up(semaphore *s) {
-  pthread_mutex_lock(&(s->mutex));
-  while (s->val == 0) {
-    pthread_cond_wait(&(s->cond), &(s->mutex));
-  }
-  s->val--;
-  pthread_mutex_unlock(&(s->mutex));
-}
-
-void down(semaphore *s) {
-  pthread_mutex_lock(&(s->mutex));
-  s->val++;
-  pthread_cond_broadcast(&(s->cond));
-  pthread_mutex_unlock(&(s->mutex));
-}
-
-void init(semaphore *s, int permissions) {
-  s->val = permissions;
-}
+void wait(semaphore *s);
+void signal(semaphore *s);
+void init(semaphore *s, int permissions);
 
 void *trythis(void *arg) {
-  up(&s);
+  wait(&s);
 
   unsigned long i = 0;
   counter += 1;
-  printf("\n Thread %d bloqueou acesso.\n", counter);
+  printf("Thread %d bloqueou acesso.\n", counter);
 
-  for (i = 0; i < (0xFFFFFFFF); i++);
+  for (i = 0; i < (1000000000); i++);
 
-  printf("\n Thread %d liberou acesso.\n", counter);
-
-  down(&s);
+  signal(&s);
+  printf("Thread %d liberou acesso.\n", counter);
 
   return NULL;
 }
@@ -71,3 +54,24 @@ int main(void) {
 
   return 0;
 }
+
+void wait(semaphore *s) {
+  pthread_mutex_lock(&(s->mutex));
+  while (s->permissions == 0) {
+    pthread_cond_wait(&(s->cond), &(s->mutex));
+  }
+  s->permissions--;
+  pthread_mutex_unlock(&(s->mutex));
+}
+
+void signal(semaphore *s) {
+  pthread_mutex_lock(&(s->mutex));
+  s->permissions++;
+  pthread_cond_broadcast(&(s->cond));
+  pthread_mutex_unlock(&(s->mutex));
+}
+
+void init(semaphore *s, int permissions) {
+  s->permissions = permissions;
+}
+
