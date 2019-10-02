@@ -1,4 +1,6 @@
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
 
 # ORIGINAL = np.array([
 #         [154, 123, 123, 123, 123, 123, 123, 136],
@@ -46,6 +48,14 @@ def readpgm(name):
 
     return (version, comments, numrows, numcols, profundidade, np.array(data))
 
+def normalized(value):
+    if value < 0:
+        return 0
+    elif value > 255:
+        return 255
+    else:
+        return value
+
 def dct_block_8(ORIGINAL):
     Q_50 = [
         [16, 11, 10, 16, 24, 40, 51, 61],
@@ -83,6 +93,34 @@ def dct_block_8(ORIGINAL):
     N = np.dot(T.transpose(), R)
     N = np.dot(N, T)
     N = N.round()
-    N = N + 126
+
+    for i in range(8):
+        for j in range(8):
+            N[i][j] = normalized(N[i][j] + 128)
 
     return N
+
+def export_to_file(version, comments, numrows, numcols, profundidade, matrix):
+    f = open("image_dct.pgm", "w+")
+
+    f.write(version)
+    f.write(comments)
+    f.write(str(numrows) + " " + str(numcols) + "\n")
+    f.write(str(profundidade) + "\n")
+
+    for i in range(numrows * numcols):
+        f.write(str(matrix[i]) + "\n")
+
+    f.close()
+
+def zigzag(rows, columns, matrix):
+    solution = [[] for i in range(rows + columns - 1)]
+
+    for i in range(rows):
+        for j in range(columns):
+            sum = i + j
+            if (sum % 2 == 0):
+                solution[sum].insert(0, matrix[i][j])
+            else:
+                solution[sum].append(matrix[i][j])
+    return solution
