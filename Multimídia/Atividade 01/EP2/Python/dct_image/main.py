@@ -1,7 +1,8 @@
 import utils as lib
 import os
 
-version, comments, numrows, numcols, profundidade, data = lib.readpgm(os.getcwd() + '/image.pgm')
+print('Iniciando...')
+version, comments, numrows, numcols, profundidade, data = lib.readpgm(os.getcwd() + '/lena.pgm')
 
 matrix = lib.dividir_blocos(data, (8, 8))
 matrix_zig = matrix.copy()
@@ -11,9 +12,13 @@ for x in range(matrix.shape[0]):
         matrix[x][y], matrix_zig[x][y] = lib.dct_block_8(matrix[x][y], matrix_zig[x][y])
 
 matrix = lib.juntar_blocos(matrix)
-matrix_zig = matrix_zig.reshape(numrows, numcols)
+
+resultado = 0;
+for x in range(matrix_zig.shape[0]):
+    for y in range(matrix_zig.shape[1]):
+         resultado += lib.zigzag2(matrix_zig[x][y].copy())
 
 lib.export_to_file(version, comments, numrows, numcols, profundidade, matrix)
 
-zig = lib.zigzag2(matrix_zig.copy())
-print("\nQuantidade de zero's disponível para descarte: " + str(zig))
+print(str(resultado))
+print('Finalizado!')
