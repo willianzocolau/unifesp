@@ -1,5 +1,6 @@
 import numpy as np
 import warnings
+from random import randrange
 warnings.filterwarnings("ignore")
 
 # ORIGINAL = np.array([
@@ -56,7 +57,7 @@ def normalized(value):
     else:
         return value
 
-def dct_block_8(ORIGINAL):
+def dct_block_8(ORIGINAL, zig):
     Q_50 = [
         [16, 11, 10, 16, 24, 40, 51, 61],
         [12, 12, 14, 19, 26, 58, 60, 55],
@@ -85,6 +86,8 @@ def dct_block_8(ORIGINAL):
     D = np.dot(D, T.transpose())
     D = D.round(1)
 
+    zig = D.copy()
+
     C = np.divide(D, Q_50)
     C = C.round()
 
@@ -98,7 +101,7 @@ def dct_block_8(ORIGINAL):
         for j in range(8):
             N[i][j] = normalized(N[i][j] + 128)
 
-    return N
+    return N, zig
 
 def export_to_file(version, comments, numrows, numcols, profundidade, matrix):
     f = open("image_dct.pgm", "w+")
@@ -123,4 +126,72 @@ def zigzag(rows, columns, matrix):
                 solution[sum].insert(0, matrix[i][j])
             else:
                 solution[sum].append(matrix[i][j])
-    return solution
+
+    result = 0
+    for i in range(solution.__len__() - 1, 0, -1):
+        non_zeros = np.count_nonzero(solution[i])
+        zeros = solution[i].__len__() - non_zeros
+        if non_zeros > 0:
+            break
+        result += zeros
+    return result
+
+
+def zigzag2(input):
+    h = 0
+    v = 0
+    vmin = 0
+    hmin = 0
+    vmax = input.shape[0]
+    hmax = input.shape[1]
+    i = 0
+    output = np.zeros((vmax * hmax))
+    while ((v < vmax) and (h < hmax)):
+        if ((h + v) % 2) == 0:
+            if (v == vmin):
+                output[i] = input[v, h]
+                if (h == hmax):
+                    v = v + 1
+                else:
+                    h = h + 1
+                i = i + 1
+            elif ((h == hmax - 1) and (v < vmax)):
+                output[i] = input[v, h]
+                v = v + 1
+                i = i + 1
+            elif ((v > vmin) and (h < hmax - 1)):
+                output[i] = input[v, h]
+                v = v - 1
+                h = h + 1
+                i = i + 1
+        else:
+            if ((v == vmax - 1) and (h <= hmax - 1)):
+                output[i] = input[v, h]
+                h = h + 1
+                i = i + 1
+            elif (h == hmin):
+                output[i] = input[v, h]
+                if (v == vmax - 1):
+                    h = h + 1
+
+                else:
+                    v = v + 1
+                i = i + 1
+
+            elif ((v < vmax - 1) and (h > hmin)):
+                output[i] = input[v, h]
+                v = v + 1
+                h = h - 1
+                i = i + 1
+
+        if ((v == vmax - 1) and (h == hmax - 1)):
+            output[i] = input[v, h]
+            break
+
+    result = 0
+    for i in range(output.__len__() - 1, 0, -1):
+        if output[i] > 0:
+            break
+        result += 1
+
+    return result
