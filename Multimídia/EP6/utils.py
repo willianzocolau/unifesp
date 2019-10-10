@@ -1,6 +1,5 @@
 import numpy as np
 import warnings
-from random import randrange
 
 warnings.filterwarnings("ignore")
 
@@ -52,6 +51,16 @@ def readpgm(name):
 
     return (version, comments, numrows, numcols, profundidade, np.array(data))
 
+def apply_intra(ORIGINAL, matrix, x, y, value, type, i):
+
+    if type == 1 and i:
+        intra_prediction_down(ORIGINAL, matrix, x, y, value)
+    elif type == 2 and i:
+        intra_prediction_right(ORIGINAL, matrix, x, y, value)
+    elif type == 3 and i:
+        intra_prediction_above(ORIGINAL, matrix, x, y, value)
+    elif type == 4 and i:
+        intra_prediction_left(ORIGINAL, matrix, x, y, value)
 
 def normalized(value):
     if value < 0:
@@ -60,6 +69,11 @@ def normalized(value):
         return 255
     else:
         return value
+
+
+def i(v):
+    v = not v
+    return v
 
 
 def limite_inf(value):
@@ -80,23 +94,69 @@ def intra_prediction_down(original, matrix, x, y, value):
     for i in range(8):
         for j in range(8):
             if x - 1 < 0: continue
-            original[j][i] = original[j][i] + (value * matrix[x-1][y][7][i])
+            original[j][i] = original[j][i] + (value * matrix[x - 1][y][7][i])
+
 
 def intra_prediction_right(original, matrix, x, y, value):
     for i in range(8):
         for j in range(8):
             if y - 1 < 0: continue
-            original[j][i] = original[j][i] + (value * matrix[x][y-1][i][7])
+            original[j][i] = original[j][i] + (value * matrix[x][y - 1][i][7])
+
+
+def intra_prediction_left(original, matrix, x, y, value):
+    for i in range(8):
+        for j in range(8):
+            if y + 1 >= matrix.shape[0]: continue
+            original[j][i] = original[j][i] + (value * matrix[x][y + 1][i][0])
 
 
 def intra_prediction_above(original, matrix, x, y, value):
     for i in range(8):
         for j in range(8):
-            if x + 1 > 79: continue
+            if x + 1 >= matrix.shape[0]: continue
             original[j][i] = original[j][i] + (value * matrix[x + 1][y][0][i])
 
 
+def choice_intra(copy, matrix, x, y, value):
+    count_o = 0
+    count_a = 0
+    count_b = 0
+    count_c = 0
+    count_d = 0
+    copy_o = copy.copy()
+    copy_a = copy.copy()
+    copy_b = copy.copy()
+    copy_c = copy.copy()
+    copy_d = copy.copy()
+
+    intra_prediction_down(copy_a, matrix, x, y, value)
+    count_a = np.count_nonzero(copy_a == 0)
+
+    intra_prediction_right(copy_b, matrix, x, y, value)
+    count_b = np.count_nonzero(copy_b == 0)
+
+    intra_prediction_above(copy_c, matrix, x, y, value)
+    count_c = np.count_nonzero(copy_c == 0)
+
+    intra_prediction_left(copy_d, matrix, x, y, value)
+    count_d = np.count_nonzero(copy_d == 0)
+
+    if count_a >= count_b and count_a >= count_c and count_a >= count_d and count_a >= count_o:
+        return 1
+    elif count_b > count_a and count_b > count_c and count_b > count_d and count_b >= count_o:
+        return 2
+    elif count_c > count_a and count_c > count_b and count_c > count_d and count_c >= count_o:
+        return 3
+    elif count_d > count_a and count_d > count_b and count_d > count_c and count_d >= count_o:
+        return 4
+    elif count_o > count_a and count_o > count_b and count_o > count_c and count_o >= count_d:
+        return 5
+
+
 def dct_block_8(ORIGINAL, zig, matrix, x, y):
+    without_intra = True;
+
     Q_90 = [
         [3, 2, 2, 3, 5, 8, 10, 12],
         [2, 2, 3, 4, 5, 12, 12, 11],
@@ -130,7 +190,8 @@ def dct_block_8(ORIGINAL, zig, matrix, x, y):
         [255, 255, 255, 255, 255, 255, 255, 255]
     ]
 
-    intra_prediction_above(ORIGINAL, matrix, x, y, -1)
+    type_intra = choice_intra(ORIGINAL.copy(), matrix, x, y, -1)
+    apply_intra(ORIGINAL, matrix, x, y, -1, type_intra, without_intra)
 
     M = ORIGINAL - 128
 
@@ -160,7 +221,7 @@ def dct_block_8(ORIGINAL, zig, matrix, x, y):
     N = np.dot(N, T)
     N = N.round()
 
-    intra_prediction_above(N, matrix, x, y, 1)
+    apply_intra(N, matrix, x, y, 1, type_intra, without_intra)
 
     for i in range(8):
         for j in range(8):

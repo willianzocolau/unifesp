@@ -2,7 +2,7 @@ import utils as lib
 import os
 
 print('Iniciando...')
-version, comments, numrows, numcols, profundidade, data = lib.readpgm(os.getcwd() + '/image.pgm')
+version, comments, numrows, numcols, profundidade, data = lib.readpgm(os.getcwd() + '/exemplo.pgm')
 
 matrix = lib.dividir_blocos(data, (8, 8))
 matrix_zig = matrix.copy()
