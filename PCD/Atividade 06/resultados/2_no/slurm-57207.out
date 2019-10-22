@@ -1,0 +1,30 @@
+
+## Job iniciado em 22-10-2019 as 00:09:55 #####################
+
+
+## Jobs ativos de pcdn: 
+
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+             57187    middle alvaro-m     pcdn PD       0:00      8 (Resources)
+             57195    middle alvaro-m     pcdn PD       0:00      8 (Priority)
+             57203    middle teste-mp     pcdn PD       0:00      8 (Priority)
+             57209    middle teste-mp     pcdn PD       0:00      2 (Priority)
+             57210    middle alvaro-m     pcdn PD       0:00      2 (Priority)
+             57207    middle alvaro-m     pcdn  R       0:00      2 r01g01,r01n10
+             57208    middle alvaro-m     pcdn  R       0:00      2 r01n[07-08]
+
+## Node de execucao do job:         r01g01 
+
+
+## Numero de tarefas para este job: 4 
+
+
+## Diretorio de submissao do job:   /home/pcdn/Willian 
+
+ln 2.000000 =    0.693147180559914 em 607 ms
+
+real	0m1.183s
+user	0m1.366s
+sys	0m0.196s
+
+## Job finalizado em 22-10-2019 as 00:09:57 ###################
