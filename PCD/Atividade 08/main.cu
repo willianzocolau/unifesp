@@ -1,4 +1,4 @@
- #include <stdio.h>
+#include <stdio.h>
 
 #define TAM 1.0
 #define DX 0.00001
@@ -8,7 +8,8 @@
 #define N (long int)(TAM/DX)
 #define CONSTANT KAPPA * DT / (DX*DX)
 
-#define THREADS_PER_BLOCK 512
+#define THREADS_PER_BLOCK 256
+#define BLOCK_SIZE 2
 
 __global__ void calculator(double *a, double *b);
 
