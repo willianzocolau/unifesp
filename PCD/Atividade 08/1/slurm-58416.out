@@ -1,0 +1,42 @@
+
+## Job iniciado em 22-11-2019 as 18:24:02 #####################
+
+
+## Jobs ativos de pcdn: 
+
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+             58416  gpushort teste-gp     pcdn  R       0:01      1 r01g01
+
+## Node de execucao do job:         r01g01 
+
+
+## Numero de tarefas para este job: 1 
+
+
+## Diretorio de submissao do job:   /home/pcdn/Willian/Atividade_08 
+
+==42264== NVPROF is profiling process 42264, command: ./a.out
+Início: qtde = 100000, dt = 1e-06, dx = 1e-05, dx² = 1e-10, kappa = 0.000045, const = 0.450000
+Iterações previstas: 10000
+dx = 1e-05, x = 1, (x-dx) = 0.99999
+prev[0,1] = 0, 0.002
+prev[n-1,n] = 0.004, 0.002
+Maior valor u[50000] = 99.8486
+==42264== Profiling application: ./a.out
+==42264== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   62.98%  2.11820s     20002  105.90us  104.41us  143.29us  [CUDA memcpy HtoD]
+                   32.41%  1.08996s     10001  108.99us  108.45us  148.00us  [CUDA memcpy DtoH]
+                    4.61%  154.97ms     10001  15.495us  15.168us  17.248us  calculator(double*, double*)
+      API calls:   94.20%  20.4389s     30003  681.23us  94.477us  30.340ms  cudaMemcpy
+                    4.10%  889.11ms         2  444.55ms  593.19us  888.51ms  cudaMalloc
+                    1.64%  356.89ms     10001  35.685us  17.324us  19.047ms  cudaLaunchKernel
+                    0.04%  9.4979ms         2  4.7490ms  528.69us  8.9692ms  cudaFree
+                    0.01%  2.1512ms        96  22.408us     302ns  870.28us  cuDeviceGetAttribute
+                    0.00%  342.79us         1  342.79us  342.79us  342.79us  cuDeviceTotalMem
+                    0.00%  182.91us         1  182.91us  182.91us  182.91us  cuDeviceGetName
+                    0.00%  5.5970us         1  5.5970us  5.5970us  5.5970us  cuDeviceGetPCIBusId
+                    0.00%  2.7860us         3     928ns     274ns  1.4880us  cuDeviceGetCount
+                    0.00%  1.4700us         2     735ns     443ns  1.0270us  cuDeviceGet
+
+## Job finalizado em 22-11-2019 as 18:24:29 ###################

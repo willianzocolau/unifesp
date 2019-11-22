@@ -1,0 +1,111 @@
+
+## Job iniciado em 22-11-2019 as 18:50:41 #####################
+
+
+## Jobs ativos de pcdn: 
+
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+             58438  gpushort teste-gp     pcdn  R       0:01      2 r01g01,r01n10
+
+## Node de execucao do job:         r01g01 
+
+
+## Numero de tarefas para este job: 4 
+
+
+## Diretorio de submissao do job:   /home/pcdn/Willian/Atividade_08 
+
+==2287== NVPROF is profiling process 2287, command: ./a.out
+==2288== NVPROF is profiling process 2288, command: ./a.out
+==44547== NVPROF is profiling process 44547, command: ./a.out
+==44550== NVPROF is profiling process 44550, command: ./a.out
+==2287== Profiling application: ./a.out
+Início: qtde = 100000, dt = 1e-06, dx = 1e-05, dx² = 1e-10, kappa = 0.000045, const = 0.450000
+Iterações previstas: 10000
+dx = 1e-05, x = 1, (x-dx) = 0.99999
+prev[0,1] = 0, 0.002
+prev[n-1,n] = 0.004, 0.002
+Maior valor u[50000] = 100
+==2287== Warning: 4 records have invalid timestamps due to insufficient device buffer space. You can configure the buffer space using the option --device-buffer-size.
+==2287== Warning: 3 records have invalid timestamps due to insufficient semaphore pool size. You can configure the pool size using the option --profiling-semaphore-pool-size.
+==2287== Profiling result:
+No kernels were profiled.
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+      API calls:   68.49%  1.03464s     30003  34.484us     588ns  1.01527s  cudaMemcpy
+                   30.95%  467.51ms         2  233.75ms  14.144us  467.50ms  cudaMalloc
+                    0.48%  7.2783ms     10001     727ns     674ns  46.093us  cudaLaunchKernel
+                    0.05%  773.24us        96  8.0540us     216ns  358.59us  cuDeviceGetAttribute
+                    0.02%  280.16us         1  280.16us  280.16us  280.16us  cuDeviceTotalMem
+                    0.00%  68.741us         1  68.741us  68.741us  68.741us  cuDeviceGetName
+                    0.00%  6.1720us         1  6.1720us  6.1720us  6.1720us  cuDeviceGetPCIBusId
+                    0.00%  4.5960us         2  2.2980us     613ns  3.9830us  cudaFree
+                    0.00%  2.1200us         3     706ns     276ns  1.3060us  cuDeviceGetCount
+                    0.00%  1.0900us         2     545ns     292ns     798ns  cuDeviceGet
+==2288== Profiling application: ./a.out
+Início: qtde = 100000, dt = 1e-06, dx = 1e-05, dx² = 1e-10, kappa = 0.000045, const = 0.450000
+Iterações previstas: 10000
+dx = 1e-05, x = 1, (x-dx) = 0.99999
+prev[0,1] = 0, 0.002
+prev[n-1,n] = 0.004, 0.002
+Maior valor u[50000] = 100
+==44547== Profiling application: ./a.out
+Início: qtde = 100000, dt = 1e-06, dx = 1e-05, dx² = 1e-10, kappa = 0.000045, const = 0.450000
+Iterações previstas: 10000
+dx = 1e-05, x = 1, (x-dx) = 0.99999
+prev[0,1] = 0, 0.002
+prev[n-1,n] = 0.004, 0.002
+Maior valor u[50000] = 100
+==2288== Warning: 4 records have invalid timestamps due to insufficient device buffer space. You can configure the buffer space using the option --device-buffer-size.
+==2288== Warning: 3 records have invalid timestamps due to insufficient semaphore pool size. You can configure the pool size using the option --profiling-semaphore-pool-size.
+==2288== Profiling result:
+No kernels were profiled.
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+      API calls:   57.87%  1.45998s         2  729.99ms  22.337us  1.45996s  cudaMalloc
+                   41.68%  1.05159s     30003  35.049us     570ns  1.03258s  cudaMemcpy
+                    0.29%  7.2745ms     10001     727ns     700ns  57.601us  cudaLaunchKernel
+                    0.07%  1.7627ms         1  1.7627ms  1.7627ms  1.7627ms  cuDeviceGetName
+                    0.07%  1.6972ms        96  17.679us     332ns  849.06us  cuDeviceGetAttribute
+                    0.02%  456.25us         1  456.25us  456.25us  456.25us  cuDeviceTotalMem
+                    0.00%  5.3130us         1  5.3130us  5.3130us  5.3130us  cuDeviceGetPCIBusId
+                    0.00%  4.8990us         2  2.4490us     590ns  4.3090us  cudaFree
+                    0.00%  3.9880us         3  1.3290us     597ns  2.4560us  cuDeviceGetCount
+                    0.00%  2.1510us         2  1.0750us     803ns  1.3480us  cuDeviceGet
+==44547== Warning: 4 records have invalid timestamps due to insufficient device buffer space. You can configure the buffer space using the option --device-buffer-size.
+==44547== Warning: 3 records have invalid timestamps due to insufficient semaphore pool size. You can configure the pool size using the option --profiling-semaphore-pool-size.
+==44547== Profiling result:
+No kernels were profiled.
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+      API calls:   76.66%  1.45995s     30003  48.660us     744ns  1.41991s  cudaMemcpy
+                   21.70%  413.21ms         2  206.60ms  1.1961ms  412.01ms  cudaMalloc
+                    0.78%  14.927ms     10001  1.4920us  1.1130us  385.94us  cudaLaunchKernel
+                    0.47%  8.9046ms         1  8.9046ms  8.9046ms  8.9046ms  cuDeviceTotalMem
+                    0.38%  7.1884ms        96  74.879us     260ns  4.1569ms  cuDeviceGetAttribute
+                    0.01%  185.81us         1  185.81us  185.81us  185.81us  cuDeviceGetName
+                    0.00%  8.8840us         2  4.4420us  1.0450us  7.8390us  cudaFree
+                    0.00%  5.3250us         1  5.3250us  5.3250us  5.3250us  cuDeviceGetPCIBusId
+                    0.00%  2.8280us         3     942ns     370ns  1.4780us  cuDeviceGetCount
+                    0.00%  1.5900us         2     795ns     488ns  1.1020us  cuDeviceGet
+==44550== Profiling application: ./a.out
+Início: qtde = 100000, dt = 1e-06, dx = 1e-05, dx² = 1e-10, kappa = 0.000045, const = 0.450000
+Iterações previstas: 10000
+dx = 1e-05, x = 1, (x-dx) = 0.99999
+prev[0,1] = 0, 0.002
+prev[n-1,n] = 0.004, 0.002
+Maior valor u[50000] = 100
+==44550== Warning: 4 records have invalid timestamps due to insufficient device buffer space. You can configure the buffer space using the option --device-buffer-size.
+==44550== Warning: 3 records have invalid timestamps due to insufficient semaphore pool size. You can configure the pool size using the option --profiling-semaphore-pool-size.
+==44550== Profiling result:
+No kernels were profiled.
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+      API calls:   61.15%  2.28317s         2  1.14159s  592.80us  2.28258s  cudaMalloc
+                   37.90%  1.41521s     30003  47.168us     741ns  1.34532s  cudaMemcpy
+                    0.87%  32.417ms     10001  3.2410us  1.0430us  18.009ms  cudaLaunchKernel
+                    0.07%  2.5382ms        96  26.439us     296ns  1.1265ms  cuDeviceGetAttribute
+                    0.01%  353.01us         1  353.01us  353.01us  353.01us  cuDeviceTotalMem
+                    0.01%  222.83us         1  222.83us  222.83us  222.83us  cuDeviceGetName
+                    0.00%  7.0880us         2  3.5440us  1.1410us  5.9470us  cudaFree
+                    0.00%  4.1870us         1  4.1870us  4.1870us  4.1870us  cuDeviceGetPCIBusId
+                    0.00%  3.7050us         3  1.2350us     399ns  2.2340us  cuDeviceGetCount
+                    0.00%  1.6800us         2     840ns     460ns  1.2200us  cuDeviceGet
+
+## Job finalizado em 22-11-2019 as 18:50:47 ###################

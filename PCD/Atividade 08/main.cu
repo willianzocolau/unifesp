@@ -8,7 +8,7 @@
 #define N (long int)(TAM/DX)
 #define CONSTANT KAPPA * DT / (DX*DX)
 
-#define THREADS_PER_BLOCK 256
+#define THREADS_PER_BLOCK 512
 #define BLOCK_SIZE 2
 
 __global__ void calculator(double *a, double *b);

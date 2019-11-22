@@ -1,0 +1,29 @@
+
+## Job iniciado em 22-11-2019 as 18:33:27 #####################
+
+
+## Jobs ativos de pcdn: 
+
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+             58421    middle alvaro-m     pcdn  R       0:00      2 r01g01,r01n10
+
+## Node de execucao do job:         r01g01 
+
+
+## Numero de tarefas para este job: 16 
+
+
+## Diretorio de submissao do job:   /home/pcdn/Willian/Atividade_08 
+
+Inicio: qtde=100000, dt=1e-06, dx=1e-05, dx²=1e-10, kappa=0.000045, const=0.450000
+Iteracoes previstas: 10000
+dx=1e-05, x=1, x-dx=0.99999
+u_prev[0,1]=0, 0.002
+u_prev[n-1,n]=0.004, 0.002
+Maior valor u[50000] = 99.8486
+
+real	0m5.508s
+user	0m5.505s
+sys	0m0.001s
+
+## Job finalizado em 22-11-2019 as 18:33:33 ###################
