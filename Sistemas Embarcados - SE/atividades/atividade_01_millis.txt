@@ -1,0 +1,49 @@
+const int buttonPin = 2; // lable pino 2
+const int ledPin = 13; // lable pino 13
+bool last; // Guarda o último estado do botão;
+uint32_t print_timer; // Timer para a impressão na porta serial UART0;
+uint8_t counter = 0; // Conta o número de mudança de estados no botão;
+int ledState = HIGH; // o atual estado do pino de saida (LED)
+int buttonState; // a leitura atual do pino de entrada
+int lastButtonState = HIGH; // a leitura anterior do pino de entrada
+long lastDebounceTime = 0;
+long debounceDelay = 200;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  last = digitalRead(buttonPin);
+}
+void loop() {
+  
+  int reading = digitalRead(buttonPin);
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay){
+    if (reading != buttonState) {
+      buttonState = reading;
+      if (buttonState == LOW) {
+        ledState = !ledState;
+      }
+    }
+  }
+  
+  bool now = reading;
+  if (now != last) { // Checa se houve uma mudança de estado;
+    ++counter;
+    last = now; // Atualiza o ultimo estado;
+    if (now == true) {
+      digitalWrite(ledPin, LOW);
+    } else {
+      digitalWrite(ledPin, HIGH);
+    }
+  }
+  //função
+  if (millis() - print_timer > 1000) { // Imprime a quantidade de mudanças a cada segundo;
+    Serial.println(counter);
+    print_timer = millis();
+  }
+}
