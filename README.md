@@ -1,2 +1,2 @@
 # University
-Projects and algorithms made in Federal University of São Paulo(UNIFESP)
+Projects and algorithms developed in Federal University of São Paulo(UNIFESP)
